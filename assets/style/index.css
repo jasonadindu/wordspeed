@@ -21,9 +21,11 @@ button {
 select {
     width: 200px;
     padding: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     border-radius: 0;
     background-color: #a7c5e3;
-    text-decoration: none;
     display: inline-block;
 }
 select:focus, button:focus {
@@ -82,12 +84,12 @@ input {
 }
 .score-container {
     position: absolute;
-    top: 60px;
+    top: 75px;
     right: 20px;
 }
 .time-container {
     position: absolute;
-    top: 60px;
+    top: 75px;
     left: 20px;
 }
 
