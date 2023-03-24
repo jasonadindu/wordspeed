@@ -15,14 +15,44 @@
         <link rel="shortcut icon" href="./assets/image/icon.png?v=2" 
         type="image/x-icon">
         <link rel="stylesheet" href="./assets/style/index.css" media="all">
-        <script src="./assets/script/index.js" defer></script>
+        
     </head>
     <body>
-    <main>
-            
-        
-   
-    </main>
+        <button id="settings-btn" class="settings-btn">
+            <i class="fas fa-cog"></i>
+        </button>
+
+        <div id="settings" class="settings">
+            <form id="settings-form">
+                <div>
+                    <label for="difficulty">Difficulty</label>
+                    <select id="difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="container">
+            <h2>Word Speed</h2>
+            <small>Type the following: </small>
+            <h1 id="word"></h1>
+            <input 
+            type="text"
+            id="text"
+            autocomplete="off"
+            placeholder="Type the word here"
+            autofocus
+            />
+            <p class="time-container">Time Left: <span id="time">99s</span></p>
+            <p class="score-container">Score: <span id="score">0</span></p>
+
+            <div id="end-game-container" class="end-game-container"></div>
+
+        </div>
+
+        <script src="./assets/script/index.js" defer></script>
       
     </body>
 </html>
