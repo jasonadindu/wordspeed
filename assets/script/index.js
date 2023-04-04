@@ -2,13 +2,14 @@
 
 const word = document.getElementById("word");
 const text = document.getElementById("text");
-const scoreE1 = document.getElementById("score");
+const hitE1 = document.getElementById("hit");
 const timeE1 = document.getElementById("time");
 const endGameE1 = document.getElementById("end-game-container");
 const settingsBtn = document.getElementById("settings-btn");
 const settings = document.getElementById("settings");
 const settingsForm = document.getElementById("settings-form");
 const difficultySelect = document.getElementById("difficulty");
+const scoreCtn = document.getElementById("highscore")
 
 const words = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'building', 
 'population','weather', 'bottle', 'history', 'dream', 'character', 'money',
@@ -26,8 +27,41 @@ const words = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'building',
 'keyboard', 'window'];
 
 let randomWord;
-let score = 0;
+let hit = 0;
 let time = 99;
+
+let scoreList = document.getElementById("score-list");
+let scoreForm = document.getElementById("score-form");
+
+scoreForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let nameInput = document.getElementById("name");
+    let scoreInput = document.getElementById("score");
+
+    let name = nameInput.value;
+    let score = scoreInput.value;
+    
+    fetch("/submit-score", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name, score})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let listItem = document.createElement("li");
+        listItem.textContent = `${data.name}: ${data.score}`;
+        scoreList.appendChild(listItem);
+
+        nameInput.value = "";
+        scoreInput = "";
+    })
+    .catch(error => {
+        console.error(error);
+    })
+})
 
 let difficulty = localStorage.getItem("difficulty") !== null 
     ? localStorage.getItem("difficulty") : "medium";
@@ -47,9 +81,9 @@ function addWordToDOM() {
     word.innerHTML = randomWord;
 }
 
-function updateScore() {
-    score++;
-    scoreE1.innerHTML = score;
+function updateHit() {
+    hit++;
+    hitE1.innerHTML = hit;
 }
 
 function updateTime() {
@@ -64,7 +98,7 @@ function updateTime() {
 function gameOver() {
     endGameE1.innerHTML = `
         <h1>Time ran out</>
-        <p>Your final score is ${score}</p>
+        <p>Your final hit is ${hit}</p>
         <button onclick="locate.relaod()">Start</button>
     `;
     endGameE1.style.display = "flex";
@@ -77,7 +111,7 @@ text.addEventListener("input", (e) => {
 
     if (insertedText === randomWord) {
         addWordToDOM();
-        updateScore();
+        updateHit();
 
         e.target.value = "";
 
@@ -111,4 +145,9 @@ class Score {
     get hits() { return this.#hits; }
     get percentage() {return this.#percentage; }
 }
+
 const scores = [];
+if(score > highscore){
+    highscore = score;
+    document.querySelector('.highscore').textContent = highscore;
+}

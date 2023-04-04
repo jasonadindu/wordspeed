@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body{
-    background-color: #008000;
+    background-color: #005600;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,7 +56,7 @@ select:focus, button:focus {
 }
 
 .container {
-    background-color: #828282;
+    background-color: #00bc00;
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
@@ -64,20 +64,22 @@ select:focus, button:focus {
     position: relative;
     text-align: center;
     width: 500px;
+    height: 400px;
 }
 h2 {
     background-color: rgba(0, 0, 0, 0.3);
     padding: 8px;
     border-radius: 4px;
-    margin: 0 0 40px;
+    margin: 0 0 70px;
 }
 h1 {
     margin: 0;
+    font-size: 44px;
 }
 input {
     border: 0;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 20px;
     width: 300px;
     padding: 12px 20px;
     margin-top: 10px;
@@ -106,4 +108,18 @@ input {
     height: 100%;
     z-index: 1;
 
+}
+.score {
+    height: 100vh;
+    width: 250px;
+    background: #c4ffc4;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.score p {
+    justify-content: center;
+}
+audio{
+    margin-right: 10px;
 }
