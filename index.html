@@ -17,7 +17,7 @@
         <link rel="shortcut icon" href="./assets/image/icon.png?v=2" 
         type="image/x-icon">
         <link rel="stylesheet" href="./assets/style/index.css" media="all">
-        <audio controls autoplay loop>
+        <audio  autoplay loop volume="0.2">
             <source src="./assets/audio/watr-fluid-10149.mp3">
         </audio>
     </head>
@@ -55,14 +55,16 @@
             </p>
 
             <div id="end-game-container" class="end-game-container"></div>
+            <br>
+            <button id="start-button">Start</button>
 
         </div>
-        <div class="score">
+        <div class="scoreTag">
             
-            <h2>High Score</h2>
-            <ul id="score-list">
-            </ul>
-            <form id="score-form">
+            <h3>High Score</h3>
+            <div id="score-list">
+            </div>
+            <!-- <form id="score-form">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name"><br>
 
@@ -70,7 +72,7 @@
             <input type="number" id="score" name="score"><br>
 
             <input type="submit" value="Submit">
-        </form>
+        </form> -->
 
         </div>
 

@@ -10,6 +10,7 @@ const settings = document.getElementById("settings");
 const settingsForm = document.getElementById("settings-form");
 const difficultySelect = document.getElementById("difficulty");
 const scoreCtn = document.getElementById("highscore")
+let highestScore = []
 
 const words = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'building', 
 'population','weather', 'bottle', 'history', 'dream', 'character', 'money',
@@ -29,39 +30,12 @@ const words = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'building',
 let randomWord;
 let hit = 0;
 let time = 99;
+let timeInterval;
 
-let scoreList = document.getElementById("score-list");
-let scoreForm = document.getElementById("score-form");
-
-scoreForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    let nameInput = document.getElementById("name");
-    let scoreInput = document.getElementById("score");
-
-    let name = nameInput.value;
-    let score = scoreInput.value;
-    
-    fetch("/submit-score", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name, score})
-    })
-    .then(response => response.json())
-    .then(data => {
-        let listItem = document.createElement("li");
-        listItem.textContent = `${data.name}: ${data.score}`;
-        scoreList.appendChild(listItem);
-
-        nameInput.value = "";
-        scoreInput = "";
-    })
-    .catch(error => {
-        console.error(error);
-    })
-})
+let startButton = document.getElementById("start-button")
+startButton.addEventListener("click", () => {
+    start();
+});
 
 let difficulty = localStorage.getItem("difficulty") !== null 
     ? localStorage.getItem("difficulty") : "medium";
@@ -69,8 +43,15 @@ let difficulty = localStorage.getItem("difficulty") !== null
 difficultySelect.value = localStorage.getItem("difficulty") != null 
     ? localStorage.getItem("difficulty") : "medium";
 
-text.focus();
-const timeInterval = setInterval(updateTime, 1000);
+
+
+function start() {
+    text.focus();
+    hit = 0;
+    time = 99;
+    endGameE1.style.display = "none";
+ timeInterval = setInterval(updateTime, 1000);
+}
 
 function getRadomWord() {
     return words[Math.floor(Math.random() * words.length)];
@@ -88,21 +69,84 @@ function updateHit() {
 
 function updateTime() {
     time--;
-    timeE1.innerHTML = time + "s";
+    timeE1.innerHTML = time < 10 ? `0${time}s` : `${time}s`;
     if (time === 0) {
         clearInterval(timeInterval);
+
+        // so game ends here now update score 
+        const score = new Score(hit, 30);
+        highestScore.push(score);
+        renderScoreUI();
         gameOver();
     }
 }
 
+
+function renderScoreUI() {
+    console.log(highestScore)
+    highestScore = highestScore.sort((a, b) =>  b.getHits - a.getHits);
+    console.log(highestScore);
+    let count = 1;
+
+    const target = document.querySelector("#score-list");
+    target.innerHTML = ""
+    for(let score of highestScore) {
+        const scoreString = `
+    <div class="score">
+        <span>#${count}</span>
+        <span>${score.getHits} words</span>
+        <span>${score.getPercentage} %</span>
+    </div>`;
+        
+    target.innerHTML += scoreString;
+    count += 1;
+    }
+    
+}
 function gameOver() {
     endGameE1.innerHTML = `
-        <h1>Time ran out</>
-        <p>Your final hit is ${hit}</p>
-        <button onclick="locate.relaod()">Start</button>
+    <h1>Time ran out</>
+    <p>Your final hit is ${hit}</p>
+    <button onclick="start()">Start</button>
     `;
     endGameE1.style.display = "flex";
+    hit = 0;
+    time = 99;
 }
+
+let scoreList = document.getElementById("score-list");
+let scoreForm = document.getElementById("score-form");
+
+// scoreForm.addEventListener("submit", (e) => {
+//     e.preventDefault();
+
+//     let nameInput = document.getElementById("name");
+//     let scoreInput = document.getElementById("score");
+
+//     let name = nameInput.value;
+//     let score = scoreInput.value;
+    
+//     fetch("/submit-score", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({name, score})
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         let listItem = document.createElement("li");
+//         listItem.textContent = `${data.name}: ${data.score}`;
+//         scoreList.appendChild(listItem);
+
+//         nameInput.value = "";
+//         scoreInput = "";
+//     })
+//     .catch(error => {
+//         console.error("There was an error submitting your score. Please try again");
+//     })
+// })
+
 
 addWordToDOM();
 
@@ -133,21 +177,16 @@ settingsForm.addEventListener("change", (e) => {
 });
 
 class Score {
-    #date;
+    // #date;
     #hits;
     #percentage;
-    constructor(date, hits, percentage) {
-        this.#date = date;
+    constructor(hits, percentage) {
         this.#hits = hits;
         this.#percentage = percentage;
     }
-    get date() {return this.#date; }
-    get hits() { return this.#hits; }
-    get percentage() {return this.#percentage; }
+    // get date() {return this.#date; }
+    get getHits() { return this.#hits; }
+    get getPercentage() {return this.#percentage; }
 }
 
-const scores = [];
-if(score > highscore){
-    highscore = score;
-    document.querySelector('.highscore').textContent = highscore;
-}
+
